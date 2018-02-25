@@ -2,7 +2,7 @@
 #define _PHONEBOOK_H
 
 #define MAX_LAST_NAME_SIZE 16
-#define HASH_TABLE_SIZE 503
+#define HASH_TABLE_SIZE 3571
 /* TODO: After modifying the original version, uncomment the following
  * line to set OPT properly */
 #define OPT 1
