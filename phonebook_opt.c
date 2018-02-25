@@ -65,8 +65,6 @@ void append(char lastName[], entry *hashtable[])
     }
 }
 
-
-
 /*
  * first try hash function. buckets=503
  * overflow handling use chaining
