@@ -34,6 +34,12 @@ int main(int argc, char *argv[])
     char line[MAX_LAST_NAME_SIZE];
     struct timespec start, end;
     double cpu_time1, cpu_time2;
+    /* hash_table */
+#ifdef OPT
+    entry *hashtable[HASH_TABLE_SIZE];
+    memset(hashtable,0,sizeof(hashtable));
+#endif
+
 
     /* check file opening */
     fp = fopen(DICT_FILE, "r");
@@ -58,7 +64,11 @@ int main(int argc, char *argv[])
             i++;
         line[i - 1] = '\0';
         i = 0;
+#ifdef OPT
+        append(line, hashtable);
+#else
         e = append(line, e);
+#endif
     }
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
@@ -71,17 +81,30 @@ int main(int argc, char *argv[])
     /* the givn last name to find */
     char input[MAX_LAST_NAME_SIZE] = "zyxel";
     e = pHead;
+#ifdef OPT
+    assert(findName(input, hashtable) &&
+           "Did you implement findName() in " IMPL "?");
 
+    assert(0 == strcmp(findName(input, hashtable)->lastName, "zyxel"));
+#else
     assert(findName(input, e) &&
            "Did you implement findName() in " IMPL "?");
     assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
-
+#endif
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
+
+#ifdef OPT
+    StringToInteger(input);
+#endif
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
+#ifdef OPT
+    findName(input,hashtable);
+#else
     findName(input, e);
+#endif
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time2 = diff_in_second(start, end);
 
