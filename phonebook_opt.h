@@ -20,7 +20,18 @@ typedef struct __PHONE_BOOK_ENTRY {
     struct __PHONE_BOOK_ENTRY *pNext;
 } entry;
 
-entry *findName(char lastName[], entry *pHead);
-entry *append(char lastName[], entry *e);
+typedef struct __TREE_ENTRY {
+    char lastName[MAX_LAST_NAME_SIZE];
+    struct __TREE_ENTRY *left;
+    struct __TREE_ENTRY *right;
+} treeEntry;
 
+typedef struct __BST_RETURN {
+    struct __PHONE_BOOK_ENTRY *head;
+    struct __TREE_ENTRY *root;
+} bst_return;
+
+treeEntry *findName(char lastName[], treeEntry *pHead);
+entry *append(char lastName[], entry *e);
+bst_return LinkedlistToBST(int n, entry *pHead);
 #endif
