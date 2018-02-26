@@ -49,19 +49,36 @@ int main(int argc, char *argv[])
     e = pHead;
     e->pNext = NULL;
 
+#ifdef OPT
+    POOL *pool = pool_create(48000000);
+    printf("pool size:%zu\n",pool_available(pool));
+#endif
+
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
+    int n=0;
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
         while (line[i] != '\0')
             i++;
         line[i - 1] = '\0';
         i = 0;
+#ifdef OPT
+        e=append(line, e, pool);
+#else
         e = append(line, e);
+#endif
+        n++;
     }
+    printf("%d\n",n);
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
+
+#ifdef OPT
+    printf("pool size:%zu\n",pool_available(pool));
+#endif
+
 
     /* close file as soon as possible */
     fclose(fp);
@@ -91,9 +108,11 @@ int main(int argc, char *argv[])
 
     printf("execution time of append() : %lf sec\n", cpu_time1);
     printf("execution time of findName() : %lf sec\n", cpu_time2);
-
+#ifdef OPT
+    pool_destroy(pool);
+#else
     if (pHead->pNext) free(pHead->pNext);
     free(pHead);
-
+#endif
     return 0;
 }
