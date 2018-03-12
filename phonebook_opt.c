@@ -19,12 +19,23 @@ int StringToInteger(char lastName[])
 
     return all;
 }
+unsigned int BKDRHash(char *str)
+{
+    unsigned int seed = 131;
+    unsigned int hash = 0;
+    while (*str) {
+        hash = hash * seed + (*str++);
+    }
+    return hash;
+}
 /* TODO: FILL YOUR OWN IMPLEMENTATION HERE! */
 entry *findName(char lastName[], entry *hashtable[])
 {
-
-    int index = StringToInteger(lastName);
+    //printf("BKDRHash: %u\n",BKDRHash(lastName));
+    //int index = StringToInteger(lastName);
+    unsigned int index = BKDRHash(lastName);
     index%=HASH_TABLE_SIZE;
+    //printf("index:%d\n",index);
     entry *query=hashtable[index];
     while (query != NULL) {
         if (strcasecmp(lastName, query->lastName) == 0)
@@ -52,8 +63,11 @@ void append(char lastName[], entry *hashtable[])
     strcpy(newentry->lastName,lastName);
     newentry->pNext=NULL;
 
-    int index = StringToInteger(lastName);
-    index%=HASH_TABLE_SIZE;
+    //int index = StringToInteger(lastName);
+    //index%=HASH_TABLE_SIZE;
+    unsigned int index = BKDRHash(lastName);
+    index%= HASH_TABLE_SIZE;
+    //printf("index:%u\n",index);
     if (hashtable[index]==NULL) {
         hashtable[index]=newentry;
     } else {

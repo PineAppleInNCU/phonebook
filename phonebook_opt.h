@@ -23,4 +23,6 @@ typedef struct __PHONE_BOOK_ENTRY {
 entry *findName(char lastName[], entry *hashtable[]);
 void append(char lastName[], entry *hashtable[]);
 int StringToInteger(char lastName[]);
+unsigned int BKDRHash(char *key);
+
 #endif
